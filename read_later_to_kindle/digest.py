@@ -25,8 +25,10 @@ class DigestFactory:
         for entry in entries:
             self._fetch_content(entry)
         html = self._get_digest_html(entries)
-        with open("/tmp/digest.html", "w") as f:
+        path = "/tmp/digest.html"
+        with open(path, "w") as f:
             f.write(html)
+        return path
 
     def _get_digest_html(self, entries):
         digest_content = "\n".join(
