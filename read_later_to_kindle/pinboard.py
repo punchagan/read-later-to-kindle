@@ -16,7 +16,7 @@ class PinboardQueueConsumer:
 
     def get_last_unread(self, n=25):
         """Return the last n unread items from Pinboard"""
-        return self._all_items[-n:]
+        return self._all_items[-n:][::-1]
 
     @property
     def update_time(self):
