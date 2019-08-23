@@ -30,7 +30,9 @@ class DigestFactory:
 
     def _get_digest_html(self, entries):
         digest_content = "\n".join(
-            self._format_entry(entry) for entry in entries if entry["content"]
+            self._format_entry(entry)
+            for entry in entries
+            if entry.get("content")
         )
         return DIGEST_TEMPLATE.format(digest_content=digest_content)
 
