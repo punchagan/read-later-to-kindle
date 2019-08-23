@@ -1,5 +1,15 @@
 <article style="page-break-after: always;" id="{{ entry.hash }}">
     <h1>{{ entry.description }}</h1>
+    <p class="read-later-actions">
+        {% if entry.mark_as_read %}
+            <span style="display: block;">
+                <a href="{{ entry.mark_as_read }}">Mark as Read</a>
+            </span>
+        {% endif %}
+        <span style="display: block;">
+            Original url: <a href="{{ entry.href }}">{{ entry.href }}</a>
+        </span>
+    </p>
     <div class="content">
         {% if entry.content %}
             {{ entry.content }}
