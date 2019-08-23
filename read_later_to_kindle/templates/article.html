@@ -1,0 +1,10 @@
+<article style="page-break-after: always;">
+    <h1>{{ entry.description }}</h1>
+    <div class="content">
+        {% if entry.content %}
+            {{ entry.content }}
+        {% else %}
+            <p>Entry's content could not be fetched</p>
+        {% endif %}
+    </div>
+</article>

@@ -1,26 +1,19 @@
-from newspaper import Article
+from os.path import abspath, dirname, join
+
+from jinja2 import Environment, FileSystemLoader
 from lxml.html import tostring
+from newspaper import Article
 
-ARTICLE_TEMPLATE = """
-<article style="page-break-after: always;">
-<h1>{description}</h1>
-<div class="content">
-    {content}
-</div>
-</article>
-"""
 
-DIGEST_TEMPLATE = """
-<html>
-<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>
-<body>
-{digest_content}
-</body>
-</html>
-"""
+HERE = dirname(abspath(__file__))
 
 
 class DigestFactory:
+    def __init__(self):
+        self.template_dir = join(HERE, "templates")
+        self.template_loader = FileSystemLoader(self.template_dir)
+        self.environment = Environment(loader=self.template_loader)
+
     def create_digest(self, entries):
         for entry in entries:
             self._fetch_content(entry)
@@ -31,15 +24,8 @@ class DigestFactory:
         return path
 
     def _get_digest_html(self, entries):
-        digest_content = "\n".join(
-            self._format_entry(entry)
-            for entry in entries
-            if entry.get("content")
-        )
-        return DIGEST_TEMPLATE.format(digest_content=digest_content)
-
-    def _format_entry(self, entry):
-        return ARTICLE_TEMPLATE.format(**entry)
+        template = self.environment.get_template("digest.html")
+        return template.render(entries=entries)
 
     def _fetch_content(self, entry):
         url = entry["href"]
