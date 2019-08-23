@@ -7,7 +7,7 @@ def main():
     pinboard_queue = PinboardQueueConsumer()
     factory = DigestFactory()
     entries = pinboard_queue.get_last_unread()
-    digest_path = factory.create_digest(entries)
+    digest_path, _ = factory.create_digest(entries)
     send_to_kindle(digest_path)
 
 

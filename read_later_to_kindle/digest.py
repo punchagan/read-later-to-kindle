@@ -8,6 +8,7 @@ from newspaper import Article
 
 HERE = dirname(abspath(__file__))
 DIGEST_NAME = "rl2k-digest.html"
+LOG_NAME = "{}.log".format(DIGEST_NAME)
 
 
 class DigestFactory:
@@ -18,7 +19,8 @@ class DigestFactory:
         path = join(tempfile.gettempdir(), DIGEST_NAME)
         with open(path, "w") as f:
             f.write(html)
-        return path
+        log_path = self._generate_log(entries)
+        return path, log_path
 
     def __init__(self):
         self.template_dir = join(HERE, "templates")
@@ -45,6 +47,15 @@ class DigestFactory:
                 content = article.text
         finally:
             entry["content"] = self._clean_content(content)
+
+    def _generate_log(self, entries):
+        log_path = join(tempfile.gettempdir(), LOG_NAME)
+        with open(log_path, "w") as f:
+            print("Generated Digest for the following entries:", file=f)
+            for entry in entries:
+                line = "{}: {}".format(entry["description"], entry["href"])
+                print(line, file=f)
+        return log_path
 
     def _get_digest_html(self, entries):
         template = self.environment.get_template("digest.html")
