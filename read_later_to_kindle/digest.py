@@ -9,11 +9,6 @@ HERE = dirname(abspath(__file__))
 
 
 class DigestFactory:
-    def __init__(self):
-        self.template_dir = join(HERE, "templates")
-        self.template_loader = FileSystemLoader(self.template_dir)
-        self.environment = Environment(loader=self.template_loader)
-
     def create_digest(self, entries):
         for entry in entries:
             self._fetch_content(entry)
@@ -23,9 +18,14 @@ class DigestFactory:
             f.write(html)
         return path
 
-    def _get_digest_html(self, entries):
-        template = self.environment.get_template("digest.html")
-        return template.render(entries=entries)
+    def __init__(self):
+        self.template_dir = join(HERE, "templates")
+        self.template_loader = FileSystemLoader(self.template_dir)
+        self.environment = Environment(loader=self.template_loader)
+
+    def _clean_content(self, html):
+        html = html.replace("\\n", "<br/>")
+        return html
 
     def _fetch_content(self, entry):
         url = entry["href"]
@@ -44,6 +44,6 @@ class DigestFactory:
         finally:
             entry["content"] = self._clean_content(content)
 
-    def _clean_content(self, html):
-        html = html.replace("\\n", "<br/>")
-        return html
+    def _get_digest_html(self, entries):
+        template = self.environment.get_template("digest.html")
+        return template.render(entries=entries)
