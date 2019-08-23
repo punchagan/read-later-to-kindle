@@ -1,4 +1,5 @@
 from os.path import abspath, dirname, join
+import tempfile
 
 from jinja2 import Environment, FileSystemLoader
 from lxml.html import tostring
@@ -6,6 +7,7 @@ from newspaper import Article
 
 
 HERE = dirname(abspath(__file__))
+DIGEST_NAME = "rl2k-digest.html"
 
 
 class DigestFactory:
@@ -13,7 +15,7 @@ class DigestFactory:
         for entry in entries:
             self._fetch_content(entry)
         html = self._get_digest_html(entries)
-        path = "/tmp/digest.html"
+        path = join(tempfile.gettempdir(), DIGEST_NAME)
         with open(path, "w") as f:
             f.write(html)
         return path
