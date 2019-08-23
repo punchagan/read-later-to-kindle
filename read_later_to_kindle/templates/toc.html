@@ -1,0 +1,10 @@
+<section style="page-break-after: always;">
+    <h2>Table of Contents</h2>
+    <ul>
+        {% for entry in entries %}
+            <li>
+                <a href="#{{ entry.hash }}">{{ entry.description }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</section>
