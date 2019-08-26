@@ -1,9 +1,9 @@
 <article style="page-break-after: always;" id="{{ entry.hash }}">
     <h1>{{ entry.description }}</h1>
     <p class="read-later-actions">
-        {% if entry.mark_as_read %}
+        {% if entry.mark_as_unread %}
             <span style="display: block;">
-                <a href="{{ entry.mark_as_read }}">Mark as Read</a>
+                <a href="{{ entry.mark_as_unread }}">Mark as Unread</a>
             </span>
         {% endif %}
         <span style="display: block;">

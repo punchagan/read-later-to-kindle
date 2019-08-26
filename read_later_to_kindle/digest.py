@@ -4,6 +4,7 @@ import tempfile
 from jinja2 import Environment, FileSystemLoader
 from lxml.html import tostring
 from newspaper import Article
+import requests
 
 from send_to_kindle import send_to_kindle
 
@@ -31,10 +32,22 @@ class DigestFactory:
         else:
             print("Not sending email. Logs at {}".format(log_path))
 
+        if self.mark_as_read:
+            self.mark_entries_as_read(entries)
+        else:
+            print("Not marking entries in digest as read.")
+
         return path, log_path
+
+    @staticmethod
+    def mark_entries_as_read(entries):
+        session = requests.Session()
+        for entry in entries:
+            session.get(entry["mark_as_read"])
 
     def __init__(self, dry_run):
         self.send_email = not dry_run
+        self.mark_as_read = not dry_run
         self.template_dir = join(HERE, "templates")
         self.template_loader = FileSystemLoader(self.template_dir)
         self.environment = Environment(loader=self.template_loader)
