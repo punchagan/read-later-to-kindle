@@ -11,7 +11,7 @@ BASE_URL = "https://api.pinboard.in/v1/posts"
 class PinboardQueueConsumer:
     """Fetches unread items from Pinboard"""
 
-    def __init__(self, num_unread=25):
+    def __init__(self, num_unread):
         self.session = requests.Session()
         self.num_unread = num_unread
 
