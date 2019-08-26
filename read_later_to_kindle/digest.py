@@ -14,6 +14,8 @@ LOG_NAME = "{}.log".format(DIGEST_NAME)
 
 
 class DigestFactory:
+    """Create and send digests."""
+
     def create_digest(self, entries):
         for entry in entries:
             self._fetch_content(entry)
@@ -22,10 +24,17 @@ class DigestFactory:
         with open(path, "w") as f:
             f.write(html)
         log_path = self._generate_log(entries)
-        send_to_kindle(path, log_path)
+        print("Digest created at {}".format(path))
+
+        if self.send_email:
+            send_to_kindle(path, log_path)
+        else:
+            print("Not sending email. Logs at {}".format(log_path))
+
         return path, log_path
 
-    def __init__(self):
+    def __init__(self, dry_run):
+        self.send_email = not dry_run
         self.template_dir = join(HERE, "templates")
         self.template_loader = FileSystemLoader(self.template_dir)
         self.environment = Environment(loader=self.template_loader)
