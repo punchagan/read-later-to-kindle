@@ -11,11 +11,13 @@ BASE_URL = "https://api.pinboard.in/v1/posts"
 class PinboardQueueConsumer:
     """Fetches unread items from Pinboard"""
 
-    def __init__(self):
+    def __init__(self, num_unread=25):
         self.session = requests.Session()
+        self.num_unread = num_unread
 
-    def get_last_unread(self, n=25):
+    def get_last_unread(self):
         """Return the last n unread items from Pinboard"""
+        n = self.num_unread
         return self._all_items[-n:][::-1]
 
     @property
