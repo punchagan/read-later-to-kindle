@@ -5,6 +5,8 @@ from jinja2 import Environment, FileSystemLoader
 from lxml.html import tostring
 from newspaper import Article
 
+from send_to_kindle import send_to_kindle
+
 
 HERE = dirname(abspath(__file__))
 DIGEST_NAME = "rl2k-digest.html"
@@ -20,6 +22,7 @@ class DigestFactory:
         with open(path, "w") as f:
             f.write(html)
         log_path = self._generate_log(entries)
+        send_to_kindle(path, log_path)
         return path, log_path
 
     def __init__(self):
