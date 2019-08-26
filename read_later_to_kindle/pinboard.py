@@ -38,7 +38,7 @@ class PinboardQueueConsumer:
             with open(cache_path, "w") as f:
                 json.dump(data, f, indent=1)
 
-        self._add_mark_as_read_url(data)
+        self._add_mark_as_read_unread_urls(data)
         return data
 
     def _fetch_all_items(self):
@@ -48,10 +48,13 @@ class PinboardQueueConsumer:
         response = self.session.get(url)
         return response.json()
 
-    def _add_mark_as_read_url(self, entries):
+    def _add_mark_as_read_unread_urls(self, entries):
         for entry in entries:
             params = "url={href}&description={description}".format(**entry)
-            mark_as_read_url = "{base_url}/add?auth_token={token}&format=json&{params}".format(
-                base_url=BASE_URL, token=TOKEN, params=params
-            )
-            entry["mark_as_read"] = mark_as_read_url
+            for toread in ("yes", "no"):
+                params_ = "{}&toread={}".format(params, toread)
+                url = "{base_url}/add?auth_token={token}&format=json&{params}".format(
+                    base_url=BASE_URL, token=TOKEN, params=params_
+                )
+                key = "mark_as_unread" if toread == "yes" else "mark_as_read"
+                entry[key] = url
