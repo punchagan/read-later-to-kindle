@@ -6,7 +6,7 @@ feedfinder2==0.0.4
 feedparser==5.2.1
 idna==2.8
 jieba3k==0.35.1
-Jinja2==2.10.1
+Jinja2==2.11.3
 lxml==4.6.2
 MarkupSafe==1.1.1
 newspaper3k==0.2.8
